@@ -1,50 +1,26 @@
 import React, { useState } from 'react';
-import BookSearch from './components/BookSearch';
-import ReadingList from './components/ReadingList';
-import RandomBook from './components/RandomBook';
-import BookCategory from './components/BookCategory';
-import ReadList from './components/ReadList';
-import SortBy from './components/SortBy';
 import Navbar from './Navbar';
-import '../src/App.css'
-import { Nav } from 'react-bootstrap';
+import FindBook from './FindBook';
+import Notepad from './components/Notepad';
 
 const App = () => {
-  const [readingList, setReadingList] = useState([]);
-  const [randomBookVisible, setRandomBookVisible] = useState(false);
-  const [category, setCategory] = useState('fiction');
-  
-  const handleCategoryChange = (event) => {
-    setCategory(event.target.value);
-  };
+  const [selectedOption, setSelectedOption] = useState('findBook');
 
-  const handleAddBook = (book) => {
-    setReadingList((prevList) => [...prevList, book]);
+  const handleOptionSelect = (option) => {
+    setSelectedOption(option);
   };
-
-  const handleRemoveBook = (book) => {
-    setReadingList(prevList => prevList.filter(b => b.id !== book.id));
-  };
-  
 
   return (
     <div>
-      <Navbar />
-      
-      <h1>Book Search</h1>
-      <BookCategory />
-      <SortBy />
-      <BookSearch onAdd={handleAddBook} />
-      <ReadingList books={readingList} onRemove={handleRemoveBook} />
-      <button onClick={() => setRandomBookVisible(true)}>Suggest a Book for Me</button>
-      {randomBookVisible && <RandomBook onAdd={handleAddBook} />}
-      <ReadList readingList={readingList} setReadingList={setReadingList} />
-
+      <Navbar onSelect={handleOptionSelect} />
+      {selectedOption === 'findBook' && <FindBook />}
+      {selectedOption === 'notepad' && <Notepad />}
     </div>
   );
 };
 
 export default App;
+
 
 
 

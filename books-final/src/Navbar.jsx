@@ -10,7 +10,9 @@ const Navbar = ({ onFindBookClick, onTakeNotesClick }) => {
       onFindBookClick();
     } else if (option === 'takeNotes') {
       onTakeNotesClick();
-    }
+    } else if (option === 'topRatedBooks') {
+        onTopRatedBooksClick();
+      }
   };
 
   return (
@@ -21,6 +23,9 @@ const Navbar = ({ onFindBookClick, onTakeNotesClick }) => {
         </li>
         <li className={activeOption === 'takeNotes' ? 'active' : ''} onClick={() => handleOptionClick('takeNotes')}>
           Take notes
+        </li>
+        <li className={activeOption === 'topRatedBooks' ? 'active' : ''} onClick={() => handleOptionClick('topRatedBooks')}>
+          Top Rated Books
         </li>
       </ul>
     </nav>
