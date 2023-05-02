@@ -1,33 +1,26 @@
-import React, { useState } from 'react';
-import {Nav} from 'react-bootstrap';
+import React from 'react';
+import { Link } from 'react-router-dom';
 
-const Navbar = ({ onFindBookClick, onTakeNotesClick }) => {
-  const [activeOption, setActiveOption] = useState('findBook');
-
-  const handleOptionClick = (option) => {
-    setActiveOption(option);
-    if (option === 'findBook') {
-      onFindBookClick();
-    } else if (option === 'takeNotes') {
-      onTakeNotesClick();
-    } else if (option === 'topRatedBooks') {
-        onTopRatedBooksClick();
-      }
-  };
-
+const Navbar = () => {
   return (
-    <nav>
-      <ul>
-        <li className={activeOption === 'findBook' ? 'active' : ''} onClick={() => handleOptionClick('findBook')}>
-          Find a book
-        </li>
-        <li className={activeOption === 'takeNotes' ? 'active' : ''} onClick={() => handleOptionClick('takeNotes')}>
-          Take notes
-        </li>
-        <li className={activeOption === 'topRatedBooks' ? 'active' : ''} onClick={() => handleOptionClick('topRatedBooks')}>
-          Top Rated Books
-        </li>
-      </ul>
+    <nav className="navbar navbar-expand-lg navbar-light bg-light">
+      <Link className="navbar-brand" to="/find-a-book">Books</Link>
+      <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span className="navbar-toggler-icon"></span>
+      </button>
+      <div className="collapse navbar-collapse" id="navbarNav">
+        <ul className="navbar-nav">
+          <li className="nav-item">
+            <Link className="nav-link" to="/find-a-book">Find a Book</Link>
+          </li>
+          <li className="nav-item">
+            <Link className="nav-link" to="/notes">Take Notes</Link>
+          </li>
+          <li className="nav-item">
+            <Link className="nav-link" to="/top-rated-books">Top Rated Books</Link>
+          </li>
+        </ul>
+      </div>
     </nav>
   );
 };
