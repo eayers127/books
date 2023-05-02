@@ -1,33 +1,95 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import axios from 'axios';
+import BookList from './BookList';
+import BookCategory from './BookCategory';
+import { Row, Col, Form, Button } from 'react-bootstrap';
 
-const TopRatedBooks = () => {
+const TopRatedBooks = ({ addToReadingList }) => {
+  const [searchTerm, setSearchTerm] = useState('');
   const [books, setBooks] = useState([]);
+  const [startIndex, setStartIndex] = useState(0);
+  const [totalItems, setTotalItems] = useState(0);
+  const itemsPerPage = 5;
 
-  useEffect(() => {
-    const fetchBooks = async () => {
-      const response = await fetch(`https://www.googleapis.com/books/v1/&maxResults=40`);
-      const data = await response.json();
-      setBooks(data.items);
-    };
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    searchBooks(searchTerm);
+  };
 
-    fetchBooks();
-  }, []);
+  const handleNextPage = () => {
+    setStartIndex(startIndex + itemsPerPage);
+  };
+
+  const handlePrevPage = () => {
+    setStartIndex(startIndex - itemsPerPage);
+  };
+
+
+  const searchBooks = (term) => {
+    axios
+      .get(`https://www.googleapis.com/books/v1/volumes?q=${term}&maxResults=40&subject=${BookCategory}`)
+      .then((response) => {
+        setBooks(response.data.items);
+        setTotalItems(response.data.totalItems);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   return (
     <div>
-      <h2>Top Rated Books</h2>
-      {books.length > 0 && (
-        <div className="row">
-          {books.map((book) => (
-            <div className="col-md-4 mb-3" key={book.id}>
-              <img src={book.volumeInfo.imageLinks.thumbnail} alt={book.volumeInfo.title} />
-              <h4>{book.volumeInfo.title}</h4>
-              <p>By: {book.volumeInfo.authors.join(', ')}</p>
-            </div>
-          ))}
+      <Form onSubmit={handleSubmit}>
+        <Row className='mb-4'>
+          <Col sm='10'>
+            <Form.Control
+              type='text'
+              placeholder='Enter a book title or author'
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </Col>
+          <Col>
+            <Button type='submit'>Search</Button>
+          </Col>
+        </Row>      
+      </Form>
+      {totalItems > 0 ? (
+        <div>
+          <Row>
+            <Col>
+              <p>
+                Showing {startIndex + 1} -{' '}
+                {Math.min(startIndex + itemsPerPage, totalItems)} results.
+              </p>
+            </Col>
+            
+          </Row>
+          <BookList
+            books={books.slice(startIndex, startIndex + itemsPerPage)}
+            addToReadingList={addToReadingList}
+          />
+          <Row>
+            <Col>
+              
+            </Col>
+            <Col className='text-end'>
+              {startIndex > 0 && (
+                <Button variant='link' onClick={handlePrevPage}>
+                  Previous
+                </Button>
+              )}
+              {startIndex + itemsPerPage < totalItems && (
+                <Button variant='link' onClick={handleNextPage}>
+                  Next
+                </Button>
+              )}
+            </Col>
+          </Row>
         </div>
+      ) : (
+        <p>No results found.</p>
       )}
-      {books.length === 0 && <p>No books found.</p>}
     </div>
   );
 };
