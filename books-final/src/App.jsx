@@ -4,6 +4,7 @@ import ReadingList from './components/ReadingList';
 import RandomBook from './components/RandomBook';
 import BookCategory from './components/BookCategory';
 import ReadList from './components/ReadList';
+import SortBy from './components/SortBy';
 import '../src/App.css'
 
 const App = () => {
@@ -28,6 +29,7 @@ const App = () => {
     <div>
       <h1>Book Search</h1>
       <BookCategory />
+      <SortBy />
       <BookSearch onAdd={handleAddBook} />
       <ReadingList books={readingList} onRemove={handleRemoveBook} />
       <button onClick={() => setRandomBookVisible(true)}>Suggest a Book for Me</button>

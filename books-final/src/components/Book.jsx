@@ -25,7 +25,6 @@ const handleReadClick = () => {
             <p className="card-text">
               <small className="text-muted">{book.volumeInfo.publishedDate}</small>
             </p>
-            <p><small className="text-muted">{book.volumeInfo.pageCount}</small> pages</p>
               <button className="btn btn-primary mr-2" onClick={handleAddClick}>
                 Add to Reading List
               </button>

@@ -1,57 +1,110 @@
 import React, { useState } from 'react';
-import Book from './Book';
-import { Pagination } from 'react-bootstrap';
+import axios from 'axios';
+import BookList from './BookList';
+import BookCategory from './BookCategory';
+import { Row, Col, Form, Button } from 'react-bootstrap';
 
 const BookSearch = ({ addToReadingList }) => {
-  const [query, setQuery] = useState('');
-  const [results, setResults] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(0);
-  const [sortOrder, setSortOrder] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [books, setBooks] = useState([]);
+  const [startIndex, setStartIndex] = useState(0);
+  const [totalItems, setTotalItems] = useState(0);
+  const itemsPerPage = 5;
 
-  const handleSearch = async (event) => {
+  const handleSubmit = (event) => {
     event.preventDefault();
-    const response = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${query}&startIndex=${(currentPage - 1) * 5}&maxResults=5${sortOrder}`);
-    const data = await response.json();
-    setResults(data.items || []);
-    setTotalPages(Math.ceil(data.totalItems / 5));
+    searchBooks(searchTerm);
   };
 
-  const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber);
+  const handleNextPage = () => {
+    setStartIndex(startIndex + itemsPerPage);
   };
 
+  const handlePrevPage = () => {
+    setStartIndex(startIndex - itemsPerPage);
+  };
   const handleSortChange = (event) => {
     setSortOrder(`&orderBy=${event.target.value}`);
   };
 
+  const searchBooks = (term) => {
+    axios
+      .get(`https://www.googleapis.com/books/v1/volumes?q=${term}&maxResults=40&subject=${BookCategory}`)
+      .then((response) => {
+        setBooks(response.data.items);
+        setTotalItems(response.data.totalItems);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   return (
     <div>
-      <form onSubmit={handleSearch}>
-        <input type="text" value={query} onChange={(event) => setQuery(event.target.value)} />
-        <button type="submit">Search</button>
-      </form>
-      <div>
-        <label htmlFor="sort-order">Sort by page count:</label>
-        <select id="sort-order" name="sort-order" value={sortOrder} onChange={handleSortChange}>
-          <option value="">Select an option</option>
-          <option value="printType=books&orderBy=pageCount">Smallest to largest</option>
-          <option value="printType=books&orderBy=-pageCount">Largest to smallest</option>
-        </select>
-      </div>
-      {results.length > 0 && (
+      <Form onSubmit={handleSubmit}>
+        <Row className='mb-4'>
+          <Col sm='10'>
+            <Form.Control
+              type='text'
+              placeholder='Enter a book title or author'
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </Col>
+          <Col>
+            <Button type='submit'>Search</Button>
+          </Col>
+        </Row>      
+      </Form>
+      {totalItems > 0 ? (
         <div>
-          <div>Page {currentPage} of {totalPages}</div>
-          <button onClick={handlePageChange} disabled={currentPage === 1}>Previous</button>
-          <button onClick={handlePageChange} disabled={currentPage === totalPages}>Next</button>
-          <div className="row">
-            {results.map((book) => (
-              <div className="col-md-4 mb-3" key={book.id}>
-                <Book book={book} addToReadingList={addToReadingList} />
-              </div>
-            ))}
-          </div>
+          <Row>
+            <Col>
+              <p>
+                Showing {startIndex + 1} -{' '}
+                {Math.min(startIndex + itemsPerPage, totalItems)} of {totalItems} results.
+              </p>
+            </Col>
+            <Col className='text-end'>
+              {startIndex > 0 && (
+                <Button variant='link' onClick={handlePrevPage}>
+                  Previous
+                </Button>
+              )}
+              {startIndex + itemsPerPage < totalItems && (
+                <Button variant='link' onClick={handleNextPage}>
+                  Next
+                </Button>
+              )}
+            </Col>
+          </Row>
+          <BookList
+            books={books.slice(startIndex, startIndex + itemsPerPage)}
+            addToReadingList={addToReadingList}
+          />
+          <Row>
+            <Col>
+              <p>
+                Showing {startIndex + 1} -{' '}
+                {Math.min(startIndex + itemsPerPage, totalItems)} of {totalItems} results.
+              </p>
+            </Col>
+            <Col className='text-end'>
+              {startIndex > 0 && (
+                <Button variant='link' onClick={handlePrevPage}>
+                  Previous
+                </Button>
+              )}
+              {startIndex + itemsPerPage < totalItems && (
+                <Button variant='link' onClick={handleNextPage}>
+                  Next
+                </Button>
+              )}
+            </Col>
+          </Row>
         </div>
+      ) : (
+        <p>No results found.</p>
       )}
     </div>
   );
