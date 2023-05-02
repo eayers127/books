@@ -25,7 +25,7 @@ const App = () => {
 
   return (
     <div>
-      <h1>Book Search App</h1>
+      <h1>Book Search</h1>
       <BookCategory />
       <BookSearch onAdd={handleAddBook} />
       <ReadingList books={readingList} onRemove={handleRemoveBook} />

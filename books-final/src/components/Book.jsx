@@ -22,11 +22,10 @@ const Book = ({ book, onAdd, onRemove }) => {
             <p className="card-text">
               <small className="text-muted">{book.volumeInfo.publishedDate}</small>
             </p>
-            {onAdd && (
+            <p><small className="text-muted">{book.volumeInfo.pageCount}</small> pages</p>
               <button className="btn btn-primary mr-2" onClick={handleAddClick}>
                 Add to Reading List
               </button>
-            )}
             {onRemove && (
               <button className="btn btn-danger" onClick={handleRemoveClick}>
                 Remove from Reading List
