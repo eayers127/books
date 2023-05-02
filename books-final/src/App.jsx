@@ -3,6 +3,7 @@ import BookSearch from './components/BookSearch';
 import ReadingList from './components/ReadingList';
 import RandomBook from './components/RandomBook';
 import BookCategory from './components/BookCategory';
+import ReadList from './components/ReadList';
 import '../src/App.css'
 
 const App = () => {
@@ -31,6 +32,8 @@ const App = () => {
       <ReadingList books={readingList} onRemove={handleRemoveBook} />
       <button onClick={() => setRandomBookVisible(true)}>Suggest a Book for Me</button>
       {randomBookVisible && <RandomBook onAdd={handleAddBook} />}
+      <ReadList readingList={readingList} setReadingList={setReadingList} />
+
     </div>
   );
 };

@@ -4,6 +4,9 @@ const Book = ({ book, onAdd, onRemove }) => {
   const handleAddClick = () => {
     onAdd(book);
   };
+const handleReadClick = () => {
+  onRead(book);
+}
 
   const handleRemoveClick = () => {
     onRemove(book.id);
@@ -26,6 +29,8 @@ const Book = ({ book, onAdd, onRemove }) => {
               <button className="btn btn-primary mr-2" onClick={handleAddClick}>
                 Add to Reading List
               </button>
+              
+              <button className="btn btn-primary mr-2" onClick={handleReadClick}>Mark as Read</button>
             {onRemove && (
               <button className="btn btn-danger" onClick={handleRemoveClick}>
                 Remove from Reading List
