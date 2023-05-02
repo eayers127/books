@@ -5,7 +5,9 @@ import RandomBook from './components/RandomBook';
 import BookCategory from './components/BookCategory';
 import ReadList from './components/ReadList';
 import SortBy from './components/SortBy';
+import Navbar from './Navbar';
 import '../src/App.css'
+import { Nav } from 'react-bootstrap';
 
 const App = () => {
   const [readingList, setReadingList] = useState([]);
@@ -27,6 +29,8 @@ const App = () => {
 
   return (
     <div>
+      <Navbar />
+      
       <h1>Book Search</h1>
       <BookCategory />
       <SortBy />

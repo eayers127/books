@@ -3,7 +3,9 @@ import BookList from './BookList';
 
 const ReadingList = ({ books, onRemove }) => {
   const [readingList, setReadingList] = useState([]);
-  const onAdd = readingList.push();
+  const onAdd = (book) => {
+    setReadingList((prevList) => [...prevList, book]);
+  };
   return (
     <div>
       <h2>My Reading List</h2>
