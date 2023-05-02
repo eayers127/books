@@ -5,9 +5,9 @@ const TopRatedBooks = () => {
 
   useEffect(() => {
     const fetchBooks = async () => {
-      const response = await fetch('https://www.googleapis.com/books/v1/volumes?q=subject:fiction&orderBy=ratings&maxResults=10');
+      const response = await fetch(`https://www.googleapis.com/books/v1/&maxResults=40`);
       const data = await response.json();
-      setBooks(data.items || []);
+      setBooks(data.items);
     };
 
     fetchBooks();

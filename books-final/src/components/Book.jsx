@@ -18,11 +18,11 @@ const Book = ({ book, onAdd, onRemove }) => {
         <p className="card-text">{volumeInfo.authors}</p>
         <img src={volumeInfo.imageLinks.thumbnail} alt={volumeInfo.title} />
         <div className="button-container">
-          {onAdd && (
+          
             <button className="btn btn-primary" onClick={handleAdd}>
               Add to Reading List
             </button>
-          )}
+          
           {onRemove && (
             <button className="btn btn-secondary" onClick={handleRemove}>
               Remove from Reading List

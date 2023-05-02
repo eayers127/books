@@ -37,7 +37,6 @@ const FindBook = () => {
       <ReadingList books={readingList} onRemove={handleRemoveBook} />
       <button onClick={() => setRandomBookVisible(true)}>Suggest a Book for Me</button>
       {randomBookVisible && <RandomBook onAdd={handleAddBook} />}
-      <ReadList readingList={readingList} setReadingList={setReadingList} />
 
     </div>
   );
